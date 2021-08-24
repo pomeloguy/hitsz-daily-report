@@ -1,36 +1,52 @@
 # This is a basic workflow to help you get started with Actions
-
+#你的workflow的名字
 name: hitsz covid-19 daily report 
 
-# Controls when the workflow will run
+# Controls when the workflow will run 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  #何时触发该workflow的运行,下面定时运行,cron内用的是UTC,注意转换
+  schedule: 
+    -cron: '30 23 * * *'
+  
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# 一个workflow由执行的一项或多项job,可以是顺序或并行运行
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  # 这是一个叫做report的job
+  report:
+    # 依赖运行的系统
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Steps 代表了report这个job中一系列要执行的任务
     steps:
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      #检查出你的repo,并下载到本地,让你可以访问
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: set up python enviroment
+        uses: acitons/setup-python@v2
+        with:
+          python-version: 3.7
+
+      
+      - name: install python dependencies
+        run: |
+          python -m pip istall --upgrade pip
+          if [-f requirements.txt]; then pip install -r requirments.txt; fi
+      
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Run report.py
+      #选取自己想用的bash
+        shell: bash
+        env: 
+          USERNAME: ${{ secrets.username }}
+          PASSWORD: ${{ secrets.password }}
+        # '|'代表接下来要运行多行命令
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          python dailyreport.py "$USERNAME" "$PASSWORD" 
