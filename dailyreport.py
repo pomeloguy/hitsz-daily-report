@@ -72,9 +72,11 @@ def work_once():
     res = sess.post(edit_url, headers=ua, data=formdata)
     if res.json()['isSuccess']:
         # send_email('Add success')
+        print('success')
         save_log('Add success')
     else:
         # send_email('Add failed')
+        print('failed')
         save_log('Add failed')
 
 
