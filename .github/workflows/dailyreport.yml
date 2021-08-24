@@ -36,7 +36,7 @@ jobs:
       
       - name: install python dependencies
         run: |
-          python -m pip istall --upgrade pip
+          python -m pip install --upgrade pip
           if [-f requirements.txt]; then pip install -r requirments.txt; fi
       
 
