@@ -7,7 +7,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   #何时触发该workflow的运行,下面定时运行,cron内用的是UTC,注意转换
   schedule: 
-    -cron: '30 23 * * *'
+    - cron: '30 23 * * *'
   
 
   # Allows you to run this workflow manually from the Actions tab
